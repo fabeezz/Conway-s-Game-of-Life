@@ -5,6 +5,7 @@
 // n - numarul de coloane
 // p - numarul celulelor vii
 using namespace std;
+
 int f_binar(int nr)
 {
     int v_binar=0,p=1,rest;
@@ -17,6 +18,7 @@ int f_binar(int nr)
     }
     return v_binar;
 }
+
 ifstream f("in.txt");
 ofstream g("out.txt");
 int mat[20][20],cop[20][20],v[400],val_binar,v_binar[11],len_v_ascii,id,nr_vii,m,n,p,k,i,j,x,y,sum_vecini;
