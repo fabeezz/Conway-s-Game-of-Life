@@ -1,7 +1,7 @@
 .data
-matrix: .space 400
-copie_matrix: .space 400
-matrix_opt: .space 400
+    matrix: .space 400
+    copie_matrix: .space 400
+    matrix_opt: .space 400
     
     nr_linii: .space 4
     nr_coloane: .space 4
@@ -12,17 +12,18 @@ matrix_opt: .space 400
     lineIndex: .long 1
     columnIndex: .long 1
     
-    pairScanf: .asciz "%d %d"
-    integerScanf: .asciz "%d " 
-    pairPrintf: .asciz "%d %d\n"
-    integerPrintf: .asciz "%d "
-    newlinePrintf: .asciz "\n"
-    newline: .asciz "\n"
+        pairScanf: .asciz "%d %d"
+        integerScanf: .asciz "%d " 
+        pairPrintf: .asciz "%d %d\n"
+        integerPrintf: .asciz "%d "
+        newlinePrintf: .asciz "\n"
+        newline: .asciz "\n"
 
     start: .space 4
     finish: .space 4
     suma_vecini: .space 4
 .text
+
 .global main
 main:
     #citire nr_linii si nr_coloane
@@ -161,11 +162,10 @@ mutare_matrix_out:
 
 movl $1, %eax
 loop_iteratii:
+        cmp nr_iteratii, %eax
+        jg iteratii_exit
 
-cmp nr_iteratii, %eax
-jg iteratii_exit
-
-pushl %eax
+    pushl %eax
 
 #pozitia de start: nr_coloane+1
         movl nr_coloane, %eax
