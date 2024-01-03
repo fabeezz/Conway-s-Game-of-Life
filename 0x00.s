@@ -1,32 +1,30 @@
 .data
-    matrix: .space 400
-    copie_matrix: .space 400
-    matrix_opt: .space 400
+matrix: .space 400
+copie_matrix: .space 400
+matrix_opt: .space 400
     
-    nr_linii: .space 4
-    nr_coloane: .space 4
-    nr_cel_vii: .space 4
-    nr_iteratii: .space 4
-    linia: .space 4
-    coloana: .space 4
-    lineIndex: .long 1
-    columnIndex: .long 1
-    
-        pairScanf: .asciz "%d %d"
-        integerScanf: .asciz "%d " 
-        pairPrintf: .asciz "%d %d\n"
-        integerPrintf: .asciz "%d "
-        newlinePrintf: .asciz "\n"
-        newline: .asciz "\n"
-
-    start: .space 4
-    finish: .space 4
-    suma_vecini: .space 4
+nr_linii: .long 3
+nr_coloane: .long 4
+nr_cel_vii: .space 4
+nr_iteratii: .space 4
+linia: .space 4
+coloana: .space 4
+lineIndex: .long 1
+columnIndex: .long 1
+    pairScanf: .asciz "%d %d"
+    integerScanf: .asciz "%d " 
+    pairPrintf: .asciz "%d %d\n"
+    integerPrintf: .asciz "%d "
+    newlinePrintf: .asciz "\n"
+    newline: .asciz "\n"
+start: .space 4
+finish: .space 4
+suma_vecini: .space 4
 .text
 
 .global main
 main:
-    #citire nr_linii si nr_coloane
+
     pushl $nr_coloane
     pushl $nr_linii
     pushl $pairScanf
@@ -56,7 +54,6 @@ loop_citire_matrix:
     popl %edx
     popl %edx
 
-# eax=(linia+1)*nr_coloane+(coloana+1) - aici punem cel_vie
     movl linia, %eax
     incl %eax
     movl nr_coloane, %ebx
@@ -73,6 +70,7 @@ loop_citire_matrix:
     jmp loop_citire_matrix
 exit_loop_citire:
 
+#citire nr_iteratii
 pushl $nr_iteratii
 pushl $integerScanf
 call scanf
@@ -98,7 +96,6 @@ movl $1, columnIndex
         subl $2, %eax
         movl %eax, finish
 
-#transformarea indicilor matricei pt a functiona :)
 mutare_matrix:
     for_lines_matrix:
         movl lineIndex, %ecx
@@ -162,10 +159,11 @@ mutare_matrix_out:
 
 movl $1, %eax
 loop_iteratii:
-        cmp nr_iteratii, %eax
-        jg iteratii_exit
 
-    pushl %eax
+cmp nr_iteratii, %eax
+jg iteratii_exit
+
+pushl %eax
 
 #pozitia de start: nr_coloane+1
         movl nr_coloane, %eax
@@ -194,17 +192,20 @@ loop_matrix:
         movl $0, %esi
         #NV: 
         movl start, %ebx
-        subl $7, %ebx
+        subl nr_coloane, %ebx
+        subl $3, %ebx
         addl (%edi, %ebx, 4), %esi
 
         #N:
         movl start, %ebx
-        subl $6, %ebx
+        subl nr_coloane, %ebx
+        subl $2, %ebx
         addl (%edi, %ebx, 4), %esi
 
         #NE:
         movl start, %ebx
-        subl $5, %ebx
+        subl nr_coloane, %ebx
+        subl $1, %ebx
         addl (%edi, %ebx, 4), %esi
 
         #V:
@@ -219,31 +220,24 @@ loop_matrix:
 
         #SV:
         movl start, %ebx
-        addl $5, %ebx
+        addl nr_coloane, %ebx
+        addl $1, %ebx
         addl (%edi, %ebx, 4), %esi
 
         #S:
         movl start, %ebx
-        addl $6, %ebx
+        addl nr_coloane, %ebx
+        addl $2, %ebx
         addl (%edi, %ebx, 4), %esi
 
         #SE:
         movl start, %ebx
-        addl $7, %ebx
+        addl nr_coloane, %ebx
+        addl $3, %ebx
         addl (%edi, %ebx, 4), %esi
 
         movl %esi, suma_vecini
 
-        #pushl suma_vecini
-        #pushl $integerPrintf
-        #call printf
-        #popl %edx
-        #popl %edx
-
-        #push $0
-        #call fflush
-        #popl %edx
-    
     movl (%edi, %ecx, 4), %eax
     lea copie_matrix, %edi # trecem pe matricea copie
     cmp $1, %eax
@@ -268,19 +262,20 @@ loop_matrix:
     jg atribuire_0 
     
     #trecem pe cazul in care 2 <= suma_vecini <= 3
-atribuire_1:
+    atribuire_1:
     movb $1, (%edi, %ecx, 4)
     jmp if_exit
     
-atribuire_0:
+    atribuire_0:
     movb $0, (%edi, %ecx, 4)
     jmp if_exit
     
-if_exit:
+    if_exit:
         movl start, %eax # daca este final de linie (M_n+2 - 2)
         addl $2, %eax
         movl nr_coloane, %ebx
         addl $2, %ebx # in ebx avem n+2
+        xorl %edx, %edx
         divl %ebx
 
         cmp $0, %edx
@@ -419,4 +414,3 @@ et_exit:
     mov $1, %eax
     xor %ebx, %ebx
     int $0x80
-
