@@ -5,13 +5,23 @@ cheie: .long 0,0,0,0,0,0
        .long 0,0,0,0,0,0
        .long 0,0,0,0,0,0
 array: .space 400
-
 parola: .asciz "parola"
+parola_criptata: .space 400
+parola_biti: .space 80
+
+nr_linii: .long 3
+nr_coloane: .long 4
+l_cheie: .space 4
+l_parola: .space 4
+indexCheie: .long 0
+indexParola: .long 0
+
 textScanf: .asciz "%s"
 textPrintf: .asciz "%s\n"
 integerPrintf: .asciz "%d "
 
 i: .long 0
+i_afis: .long 0
 .text
 
 .global main
@@ -24,7 +34,7 @@ main:
 #popl %edx
 #popl %edx
 
-lea array, %edi
+lea parola_biti, %edi
 movl $parola, %ecx           # pun adresa parolei in ecx
 movl $7, %edx                # index pt array
 
@@ -50,17 +60,24 @@ inc %ecx
 jmp loop_start
 loop_end:
 
+#l_parola = total_array - 8 (din metoda mea de atribuire :o)
+subl $8, %edx
+movl %edx, l_parola
 
+#l_cheie  = (nr_linii+2)*(nr_coloane+2)-1 = 29 (pt ex nostru)
+movl nr_linii, %eax
+addl $2, %eax
+movl nr_coloane, %ebx
+addl $2, %ebx
+xorl %edx, %edx
+mull %ebx
+decl %eax
+movl %eax, l_cheie
 
-afis_array:
-movl i, %ecx
-cmp $47, %ecx
-jg afis_array_end
+# indexCheie <= l_cheie
+# indexParola <= l_parola
 
-lea array, %edi
-movl (%edi, %ecx, 4), %eax
-
-pushl %eax
+pushl l_parola
 pushl $integerPrintf
 call printf
 popl %edx
@@ -70,16 +87,50 @@ pushl $0
 call fflush
 popl %edx
 
-incl i
-jmp afis_array
+#criptare:
+#movl i, %ecx
+#cmp l_parola, %ecx
+#jg criptare_exit
+#
+#lea parola_biti, %edi
+#movl i, %ecx
+#movl (%edi, %ecx, 4), %eax
+#
+#lea cheie, %esi
+#movl i, %ecx
+#movl (%esi, %ecx, 4), %ebx
+#
+#xorl %ebx, %eax
+#
+#lea parola_criptata, %esi
+#movl i, %ecx
+#movl %eax, (%esi, %ecx, 4)
+#
+#incl i
+#jmp criptare
+#criptare_exit:
 
-afis_array_end:
-##afisare parola
-#pushl $parola
-#pushl $textPrintf
+#afis_array:
+#movl i_afis, %ecx
+#cmp l_parola, %ecx
+#jg afis_array_end
+#
+#lea parola_biti, %edi
+#movl (%edi, %ecx, 4), %eax
+#
+#pushl %eax
+#pushl $integerPrintf
 #call printf
 #popl %edx
 #popl %edx
+#
+#pushl $0
+#call fflush
+#popl %edx
+#
+#incl i_afis
+#jmp afis_array
+#afis_array_end:
 
 et_exit:
     movl $1, %eax
