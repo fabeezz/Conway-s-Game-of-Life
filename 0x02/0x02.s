@@ -11,13 +11,6 @@
     coloana: .space 4
     lineIndex: .long 1
     columnIndex: .long 1
-    
-pairScanf: .asciz "%d %d"
-integerScanf: .asciz "%d" 
-pairPrintf: .asciz "%d %d\n"
-integerPrintf: .asciz "%d "
-newlinePrintf: .asciz "\n"
-newline: .asciz "\n"
 
     start: .space 4
     finish: .space 4
@@ -29,11 +22,16 @@ read: .asciz "r"
 write: .asciz "w"
 inputFile: .asciz "in.txt"
 outputFile: .asciz "out.txt"
-.text
 
+pairScanf: .asciz "%d %d"
+integerScanf: .asciz "%d" 
+pairPrintf: .asciz "%d %d\n"
+integerPrintf: .asciz "%d "
+newlinePrintf: .asciz "\n"
+newline: .asciz "\n"
+.text
 .global main
 main:
-
 #deschid fisierul de input
 pushl $read
 pushl $inputFile
@@ -67,7 +65,7 @@ popl %edx
 popl %edx
 popl %edx
 
-    mov $0, %ecx
+mov $0, %ecx
 loop_citire_matrix:
     cmp  nr_cel_vii, %ecx
     jge exit_loop_citire
@@ -383,22 +381,6 @@ jmp loop_iteratii
 
 iteratii_exit:
 
-#pozitia de start: nr_coloane+1
-        movl nr_coloane, %eax
-        incl %eax
-        movl %eax, start
-        addl $2, start
-
-#pozitia de finish: (nr_linii+1)*(nr_coloane+2)-2
-        movl nr_linii, %eax
-        incl %eax
-        movl nr_coloane, %ebx
-        addl $2, %ebx
-        movl $0, %edx
-        mull %ebx
-        subl $2, %eax
-        movl %eax, finish
-
 movl $1, lineIndex
 movl $1, columnIndex
 
@@ -410,30 +392,6 @@ popl %edx
 popl %edx
 
 mov %eax, pointer_out
-
-#pushl n
-#pushl $integerPrintf
-#pushl pointer_out
-#call fprintf
-#popl %edx
-#popl %edx
-#popl %edx
-#
-#pushl $0
-#call fflush
-#popl %edx
-#
-#pushl m
-#pushl $integerPrintf
-#pushl pointer_out
-#call fprintf
-#popl %edx
-#popl %edx
-#popl %edx
-#
-#pushl $0
-#call fflush
-#popl %edx
 
 afis_matrix:
     for_lines:
