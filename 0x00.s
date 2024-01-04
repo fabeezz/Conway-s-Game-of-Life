@@ -2,24 +2,24 @@
 matrix: .space 400
 copie_matrix: .space 400
 matrix_opt: .space 400
-    
-nr_linii: .long 3
-nr_coloane: .long 4
+
+nr_linii: .space 4
+nr_coloane: .space 4
 nr_cel_vii: .space 4
 nr_iteratii: .space 4
 linia: .space 4
 coloana: .space 4
 lineIndex: .long 1
 columnIndex: .long 1
+start: .space 4
+finish: .space 4
+suma_vecini: .space 4
     pairScanf: .asciz "%d %d"
     integerScanf: .asciz "%d " 
     pairPrintf: .asciz "%d %d\n"
     integerPrintf: .asciz "%d "
     newlinePrintf: .asciz "\n"
     newline: .asciz "\n"
-start: .space 4
-finish: .space 4
-suma_vecini: .space 4
 .text
 
 .global main
@@ -40,6 +40,7 @@ main:
     popl %edx
 
     mov $0, %ecx
+
 loop_citire_matrix:
     cmp  nr_cel_vii, %ecx
     jge exit_loop_citire
@@ -138,7 +139,6 @@ nc:
 incl lineIndex
 addl $2, start
 jmp for_lines_matrix
-
 mutare_matrix_out:
 
 #pozitia de start: nr_coloane+1
@@ -182,7 +182,6 @@ pushl %eax
         movl %eax, finish
 
 loop_matrix:
-
         movl start, %ecx
         cmp finish, %ecx
         jg loop_exit
