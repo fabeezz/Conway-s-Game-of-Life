@@ -344,25 +344,8 @@ jmp loop_iteratii
 
 iteratii_exit:
 
-#pozitia de start: nr_coloane+1
-        movl nr_coloane, %eax
-        incl %eax
-        movl %eax, start
-        addl $2, start
-
-#pozitia de finish: (nr_linii+1)*(nr_coloane+2)-2
-        movl nr_linii, %eax
-        incl %eax
-        movl nr_coloane, %ebx
-        addl $2, %ebx
-        movl $0, %edx
-        mull %ebx
-        subl $2, %eax
-        movl %eax, finish
-
 movl $1, lineIndex
 movl $1, columnIndex
-
 afis_matrix:
     for_lines:
         movl lineIndex, %ecx
