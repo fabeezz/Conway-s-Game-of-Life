@@ -21,10 +21,8 @@ suma_vecini: .space 4
     newlinePrintf: .asciz "\n"
     newline: .asciz "\n"
 .text
-
 .global main
 main:
-
     pushl $nr_coloane
     pushl $nr_linii
     pushl $pairScanf
@@ -40,7 +38,7 @@ main:
     popl %edx
 
     mov $0, %ecx
-
+    
 loop_citire_matrix:
     cmp  nr_cel_vii, %ecx
     jge exit_loop_citire
@@ -125,21 +123,15 @@ mutare_matrix:
                 movl %ebx, (%edi, %eax, 4)
 
                 movl (%edi, %eax, 4), %ebx
-                
-                #pushl %eax
-                #pushl $integerPrintf
-                #call printf
-                #popl %ebx
-                #popl %ebx
 
                 incl columnIndex
                 incl start
                 jmp for_columns_matrix
-nc:
-incl lineIndex
-addl $2, start
-jmp for_lines_matrix
-mutare_matrix_out:
+    nc:
+        incl lineIndex
+        addl $2, start
+        jmp for_lines_matrix
+        mutare_matrix_out:
 
 #pozitia de start: nr_coloane+1
         movl nr_coloane, %eax
@@ -159,9 +151,8 @@ mutare_matrix_out:
 
 movl $1, %eax
 loop_iteratii:
-
-cmp nr_iteratii, %eax
-jg iteratii_exit
+    cmp nr_iteratii, %eax
+    jg iteratii_exit
 
 pushl %eax
 
